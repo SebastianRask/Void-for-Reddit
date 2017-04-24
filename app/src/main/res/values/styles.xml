@@ -1,0 +1,56 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Void" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:colorActivatedHighlight">@color/accent</item>
+
+        <item name="android:colorBackground">@color/background_light</item>
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:windowBackground">@color/background_light</item>
+        <item name="android:windowAllowEnterTransitionOverlap" tools:targetApi="lollipop">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap" tools:targetApi="lollipop">true</item>
+        <item name="android:windowSharedElementsUseOverlay" tools:targetApi="lollipop">false</item>
+    </style>
+
+    <style name="Void.Home">
+        <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">true</item>
+        <item name="android:statusBarColor">@color/immersive_bars</item>
+        <item name="android:navigationBarColor">@color/immersive_bars</item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@color/background_dark</item>
+    </style>
+
+    <style name="Void.Translucent">
+        <!-- using a semi-transparent window background for the drag-back gesture -->
+        <item name="android:windowBackground">@color/black_transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap" tools:targetApi="lollipop">false</item>
+        <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">true</item>
+        <item name="android:windowSharedElementsUseOverlay" tools:targetApi="lollipop">true</item>
+    </style>
+
+    <style name="Void.Translucent.Preview">
+        <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
+        <!--item name="android:windowSharedElementEnterTransition">@transition/preview_shared_enter</item>
+        <item name="android:windowSharedElementReturnTransition">@transition/preview_shared_return</item-->
+    </style>
+
+    <!-- Text Font Styles -->
+    <style name="Headline" parent="@style/Base.TextAppearance.AppCompat.Headline">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@string/font_roboto_light</item>
+    </style>
+    <style name="Subheading" parent="@style/Base.TextAppearance.AppCompat.Subhead"/>
+    <style name="Title" parent="@style/Base.TextAppearance.AppCompat.Title"/>
+    <style name="Body" parent="@style/Base.TextAppearance.AppCompat.Body1"/>
+    <style name="Body.Bold" parent="@style/Base.TextAppearance.AppCompat.Body2"/>
+    <style name="Caption" parent="@style/Base.TextAppearance.AppCompat.Caption"/>
+
+</resources>

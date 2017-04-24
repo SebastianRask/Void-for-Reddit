@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.commit451.elasticdragdismisslayout.ElasticDragDismissFrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/draggable_frame"
+    app:dragDismissDistance="110dp"
+    app:dragDismissScale="0.95">
+
+    <View
+        android:transitionName="@string/transition_background_preview"
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_light"/>
+
+    <ScrollView
+        android:nestedScrollingEnabled="true"
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <net.nrask.srjneeds.views.DynamicImageView
+                android:transitionName="@string/transition_image_preview"
+                android:id="@+id/preview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:background="@color/accent"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="50dp"
+                android:layout_height="80dp" />
+        </LinearLayout>
+    </ScrollView>
+
+
+</com.commit451.elasticdragdismisslayout.ElasticDragDismissFrameLayout>
