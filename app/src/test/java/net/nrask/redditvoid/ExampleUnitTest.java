@@ -1,4 +1,4 @@
-package net.nrask.atmos;
+package net.nrask.redditvoid;
 
 import org.junit.Test;
 

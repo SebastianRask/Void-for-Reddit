@@ -44,7 +44,6 @@
 
     <!-- Text Font Styles -->
     <style name="Headline" parent="@style/Base.TextAppearance.AppCompat.Headline">
-        <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">@string/font_roboto_light</item>
     </style>
     <style name="Subheading" parent="@style/Base.TextAppearance.AppCompat.Subhead"/>
@@ -53,4 +52,15 @@
     <style name="Body.Bold" parent="@style/Base.TextAppearance.AppCompat.Body2"/>
     <style name="Caption" parent="@style/Base.TextAppearance.AppCompat.Caption"/>
 
+    <!-- Custom Text Styles -->
+    <style name="SubmissionTitle" parent="Headline">
+        <item name="android:textSize">@dimen/submission_title_size</item>
+        <item name="android:paddingStart">@dimen/default_margin</item>
+        <item name="android:paddingEnd">@dimen/default_margin</item>
+        <item name="android:paddingTop">@dimen/default_margin_half</item>
+        <item name="android:paddingBottom">@dimen/default_margin_half</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:transitionName" tools:targetApi="lollipop">@string/transition_title</item>
+    </style>
 </resources>

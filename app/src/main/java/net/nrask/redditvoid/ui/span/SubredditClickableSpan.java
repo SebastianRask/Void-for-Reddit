@@ -1,4 +1,4 @@
-package net.nrask.atmos.ui.span;
+package net.nrask.redditvoid.ui.span;
 
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;

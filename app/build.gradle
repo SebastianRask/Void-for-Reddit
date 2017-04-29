@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "net.nrask.atmos"
+        applicationId "net.nrask.redditvoid"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
@@ -72,6 +72,10 @@ dependencies {
 
     compile "com.github.ccrama:JRAW:e9ae5374fe"
     compile "com.google.guava:guava:20.0"
+
+    compile 'com.fasterxml.jackson.core:jackson-core:2.7.3'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.3'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.3'
 
     testCompile "junit:junit:4.12"
     annotationProcessor "com.jakewharton:butterknife-compiler:8.5.1"

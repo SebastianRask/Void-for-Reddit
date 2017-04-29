@@ -1,4 +1,4 @@
-package net.nrask.atmos.ui.views;
+package net.nrask.redditvoid.ui.views;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
@@ -8,8 +8,12 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import net.nrask.atmos.R;
+import net.nrask.redditvoid.R;
+import net.nrask.srjneeds.util.MathUtil;
+import net.nrask.srjneeds.util.SRJUtil;
 
 /**
  * Created by Sebastian Rask on 24-04-2017.
@@ -19,23 +23,27 @@ import net.nrask.atmos.R;
  */
 
 public class DragLayout extends ViewGroup {
+	private int mCollapsedMargin;
 
 	private ViewDragHelper mDragHelper;
 	private DragHelperCallback mCallback;
 
 	private View mHeaderView;
+	private View mInnerHeaderView;
 	private View mDescView;
-	private View mTitleView;
+	private TextView mTitleView;
 
-	private float mInitialMotionX;
 	private float mInitialMotionY;
 
-	private int mDragRange;
+	private boolean mStartCollapsed;
 	private int mTop;
-	private int mRight;
-	private float mDragOffset;
-
+	private float mCollapseOffset;
 	private boolean isLaidOut;
+
+	int dWidth, dHeight;
+	int endWidth, mEndHeight;
+	int mCollapseWidth, mCollapseHeight;
+	int originalTitleTop = -1;
 
 	public DragLayout(Context context) {
 		this(context, null);
@@ -48,26 +56,27 @@ public class DragLayout extends ViewGroup {
 	public DragLayout(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		mDragHelper = ViewDragHelper.create(this, 1f, mCallback = new DragHelperCallback());
+		mCollapsedMargin = SRJUtil.dpToPixels(getContext(), 16);
 	}
 
 	@Override
 	protected void onFinishInflate() {
 		mHeaderView = findViewById(R.id.viewHeader);
+		mInnerHeaderView = findViewById(R.id.inner_header);
 		mDescView = findViewById(R.id.viewDesc);
-		mTitleView = findViewById(R.id.txt_title);
+		mTitleView = (TextView) findViewById(R.id.txt_title);
 	}
 
-	public void maximize() {
+	public void expand() {
 		smoothSlideTo(0f);
 	}
 
-	public void minimize() {
-		smoothSlideTo(0.95f);
+	public void collapse() {
+		smoothSlideTo(mCollapseOffset);
 	}
 
 	private boolean smoothSlideTo(float slideOffset) {
-		int topBound = getPaddingTop();
-		int y = (int) (topBound + slideOffset * mDragRange);
+		int y = (int) (slideOffset * getDragRange());
 
 		if (mDragHelper.smoothSlideViewTo(mHeaderView, mHeaderView.getLeft(), y)) {
 			ViewCompat.postInvalidateOnAnimation(this);
@@ -98,7 +107,6 @@ public class DragLayout extends ViewGroup {
 
 		switch (action) {
 			case MotionEvent.ACTION_DOWN: {
-				mInitialMotionX = x;
 				mInitialMotionY = y;
 				interceptTap = mDragHelper.isViewUnder(mHeaderView, (int) x, (int) y);
 				break;
@@ -119,23 +127,23 @@ public class DragLayout extends ViewGroup {
 		boolean isHeaderViewUnder = mDragHelper.isViewUnder(mHeaderView, (int) x, (int) y);
 		switch (action & MotionEventCompat.ACTION_MASK) {
 			case MotionEvent.ACTION_DOWN: {
-				mInitialMotionX = x;
 				mInitialMotionY = y;
 				break;
 			}
 
 			case MotionEvent.ACTION_UP: {
 				float dy = y - mInitialMotionY;
+				float percentageCollapsed = getPercentageCollapsed();
 
 				boolean isCollapsing = dy > 0;
 				boolean collapse = isCollapsing
-						? mDragOffset > 0.25f
-						: mDragOffset > 0.75f;
+						? percentageCollapsed > 0.25f
+						: percentageCollapsed > 0.75f;
 				
 				if (collapse) {
-					minimize();
+					collapse();
 				} else {
-					maximize();
+					expand();
 				}
 				break;
 			}
@@ -171,49 +179,69 @@ public class DragLayout extends ViewGroup {
 
 	@Override
 	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-		mDragRange = getHeight() - mHeaderView.getHeight();
-
 		if (!isLaidOut) {
-			//mTop = 1400;
-			mCallback.onViewPositionChanged(mHeaderView, 0, 1400, 0, 0);
+			endWidth = getViewWidth(mDescView);
+			mEndHeight = getViewHeight(mHeaderView);
+
+			//ToDo: Find suitable values
+			int maxWidth = 800;
+			int minWidth = 400;
+
+			int maxHeight = 220;
+			int minHeight = 150;
+
+			mCollapseWidth = MathUtil.ensureRange(getViewWidth(mTitleView), minWidth, maxWidth);
+			mCollapseHeight = MathUtil.ensureRange(getViewHeight(mTitleView), minHeight, maxHeight);
+
+			dWidth = endWidth - mCollapseWidth;
+			dHeight = mEndHeight - mCollapseHeight;
+
+			mTop = isStartingCollapsed() ? getHeight() - mCollapsedMargin - getViewHeight(mHeaderView) : 0;
+			mCallback.onViewPositionChanged(mHeaderView, 0, mTop, 0, 0);
+
+			if (getPercentageCollapsed() > 0.5f) {
+				collapse();
+			} else {
+				expand();
+			}
+
 			isLaidOut = true;
 		}
 
-//		int endWidth = getViewWidthEstimate(mDescView);
-//		int endHeight = getViewHeightEstimate(mHeaderView); // Find out how to find end height
-//
-//		int collapseWidth = getViewWidthEstimate(mTitleView);
-//		int collapseHeight = getViewHeightEstimate(mTitleView);
-//
-//		int dy = endHeight - collapseHeight;
-//		int dx = endWidth - collapseWidth;
-//
-//		int rightMargin = (int) (100 * mDragOffset);
-//		int leftMargin = (int) (400 * mDragOffset);
-//
-//		float percentExpanded = 1 + mDragOffset;
-//
-//		mHeaderView.layout(
-//				leftMargin,
-//				mTop,
-//				right - rightMargin,
-//				mTop + getViewHeightEstimate(mTitleView)
-//		);
-
 		mDescView.layout(
 				0,
-				mTop + mHeaderView.getMeasuredHeight(),
+				mTop + getViewHeight(mHeaderView),
 				right,
 				mTop + bottom
 		);
 	}
 
-	protected int getViewWidthEstimate(View view) {
+	public boolean isStartingCollapsed() {
+		return mStartCollapsed;
+	}
+
+	public void setStartCollapsed(boolean startCollapsed) {
+		this.mStartCollapsed = startCollapsed;
+	}
+
+	protected int getViewWidth(View view) {
 		return view.getWidth() > 0 ? view.getWidth() : view.getMeasuredWidth();
 	}
 
-	protected int getViewHeightEstimate(View view) {
+	protected int getViewHeight(View view) {
 		return view.getHeight() > 0 ? view.getHeight() : view.getMeasuredHeight();
+	}
+
+	protected float getPercentageCollapsed() {
+		return getDragOffset()/mCollapseOffset;
+	}
+
+	protected float getDragOffset() {
+		return (float) mTop/getDragRange();
+	}
+
+	protected int getDragRange() {
+		return getHeight() - mCollapseHeight;
 	}
 
 	private class DragHelperCallback extends ViewDragHelper.Callback {
@@ -224,60 +252,62 @@ public class DragLayout extends ViewGroup {
 		}
 
 		@Override
-		public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
-			int endWidth = getViewWidthEstimate(mDescView);
-			int endHeight = getViewHeightEstimate(mHeaderView); // Find out how to find end height
-
-			int collapseWidth = getViewWidthEstimate(mTitleView);
-			int collapseHeight = getViewHeightEstimate(mTitleView);
+		public void onViewPositionChanged(View changedView, int l, int top, int dx, int dy) {
+			int dragRange = getDragRange();
 
 			mTop = top;
-			mDragOffset = (float) top / mDragRange;
-			mRight = endWidth;
+			mCollapseOffset = (float) ((dragRange - mCollapsedMargin) / (dragRange * 1.0));
+			float percentageCollapsed = getPercentageCollapsed();
+			float scale = 1;// - getPercentageCollapsed()/4f;
 
-			int rightMargin = (int) (100 * mDragOffset);
-			int leftMargin = (int) (400 * mDragOffset);
+			int rightMarginBase = SRJUtil.dpToPixels(getContext(), mCollapsedMargin/4);
+			int rightMargin = (int) (rightMarginBase * percentageCollapsed);
 
-			float percentExpanded = 1 + mDragOffset;
+			int left = (int) ((dWidth - rightMarginBase) * percentageCollapsed);
+			int right = (int) (endWidth  - rightMargin);
+
+			int scaleOffsetBase = 150;
+			int scaleOffset = (int) (scaleOffsetBase - scaleOffsetBase * scale);
+			left = (int) (left ) + scaleOffset;
+			right = (int) (right) + scaleOffset;
 
 			mHeaderView.layout(
-					leftMargin,
+					left,
 					mTop,
-					endWidth - rightMargin,
-					mTop + getViewHeightEstimate(mTitleView)
+					right,
+					(int) (mTop + mCollapseHeight + dHeight * (1 - percentageCollapsed))
+			);
+
+			mHeaderView.setLayoutParams(new LinearLayout.LayoutParams(
+					right - left, LayoutParams.WRAP_CONTENT
+			));
+
+			if (originalTitleTop < 0) {
+				originalTitleTop = mTitleView.getTop();
+			}
+
+			int innerHeaderTop = (int) (-originalTitleTop + originalTitleTop * (1 - percentageCollapsed));
+			mInnerHeaderView.layout(
+					mInnerHeaderView.getLeft(),
+					innerHeaderTop,
+					mInnerHeaderView.getRight(),
+					mInnerHeaderView.getBottom()
 			);
 
 			// "Animate" views
-			float sizeScale = 1 + (1 - mDragOffset);
-//			mHeaderView.setPivotX(width);
-//			mHeaderView.setPivotY(height);
-//			mHeaderView.setLayoutParams(new LayoutParams(
-//					(int) (titleWidth * sizeScale),
-//					(int) (titleHeight * sizeScale)
-//			));
-//			mHeaderView.setScaleX(sizeScale);
-//			mHeaderView.setScaleY(sizeScale);
+			float sizeScale = 1 + (1 - getDragOffset());
 
-			mDescView.setAlpha(1 - mDragOffset);
+			mHeaderView.setScaleX(scale);
+			mHeaderView.setScaleY(scale);
+
+			mDescView.setAlpha(1 - getPercentageCollapsed());
 
 			requestLayout();
 		}
 
 		@Override
-		public void onViewReleased(View releasedChild, float xvel, float yvel) {
-			int top = getPaddingTop();
-			if (yvel > 0 || (yvel == 0 && mDragOffset > 0.5f)) {
-				top += mDragRange;
-			}
-
-			if (releasedChild != null) {
-				mDragHelper.settleCapturedViewAt(releasedChild.getLeft(), top);
-			}
-		}
-
-		@Override
 		public int getViewVerticalDragRange(View child) {
-			return mDragRange;
+			return getDragRange();
 		}
 
 		@Override

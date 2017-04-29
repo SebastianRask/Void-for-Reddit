@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="net.nrask.atmos"
+<manifest package="net.nrask.redditvoid"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
-    <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS"/>
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".VoidApplication"
+        android:name="net.nrask.redditvoid.VoidApplication"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Void">
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name="net.nrask.redditvoid.ui.activities.MainActivity"
             android:theme="@style/Void">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -23,11 +21,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.ContentPreviewActivity"
+            android:name="net.nrask.redditvoid.ui.activities.ContentPreviewActivity"
             android:theme="@style/Void.Translucent.Preview">
         </activity>
         <activity
-            android:name=".ui.activities.NoNonsenseActivity">
+            android:name="net.nrask.redditvoid.ui.activities.NoNonsenseActivity">
         </activity>
     </application>
 

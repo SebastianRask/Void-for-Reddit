@@ -1,4 +1,4 @@
-package net.nrask.atmos.data;
+package net.nrask.redditvoid.data;
 
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.models.Subreddit;

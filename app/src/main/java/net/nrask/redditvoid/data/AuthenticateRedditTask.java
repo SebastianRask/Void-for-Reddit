@@ -1,4 +1,4 @@
-package net.nrask.atmos.data;
+package net.nrask.redditvoid.data;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,6 +8,7 @@ import net.dean.jraw.http.oauth.Credentials;
 import net.dean.jraw.http.oauth.OAuthData;
 import net.dean.jraw.http.oauth.OAuthException;
 
+import java.net.SocketTimeoutException;
 import java.util.UUID;
 
 /**
@@ -38,7 +39,7 @@ public class AuthenticateRedditTask extends RedditAsyncTask<OAuthData> {
 		try {
 			authData = mRedditClient.getOAuthHelper().easyAuth(mCredentials);
 			mRedditClient.authenticate(authData);
-		} catch (OAuthException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 

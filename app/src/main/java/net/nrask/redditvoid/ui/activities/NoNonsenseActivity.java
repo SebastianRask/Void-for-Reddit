@@ -1,4 +1,4 @@
-package net.nrask.atmos.ui.activities;
+package net.nrask.redditvoid.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
-import net.nrask.atmos.R;
+import net.nrask.redditvoid.R;
 
 public class NoNonsenseActivity extends AppCompatActivity {
 

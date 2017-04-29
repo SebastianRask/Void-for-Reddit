@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Void</string>
-    <string name="transition_image_preview">preview</string>
-    <string name="transition_background_preview">preview_background</string>
-    <string name="shared_image_url">shared_preview_url</string>
 
     <string name="posted_second_ago">%d second ago</string>
     <string name="posted_seconds_ago">%d seconds ago</string>
@@ -18,7 +15,6 @@
 
     <string name="posted_on_date">on %s</string>
 
-    <!-- Fonts -->
     <string name="font_roboto_thin">sans-serif-thin</string>
     <string name="font_roboto_regular">sans-serif</string>
     <string name="font_roboto_mono">monospace</string>
@@ -26,4 +22,13 @@
     <string name="font_roboto_light">sans-serif-light</string>
     <string name="font_roboto_condensed">sans-serif-condensed</string>
 
+    <!-- Fonts -->
+    <string name="transition_title">transTitle</string>
+    <string name="transition_image_preview">preview</string>
+    <string name="transition_background_preview">preview_background</string>
+
+    <!-- Intent Keys -->
+    <string name="intent_reddit_submission_show_review">intent_submission_show_preview</string>
+    <string name="intent_reddit_submission">intent_key_submission</string>
+    <string name="shared_image_url">shared_preview_url</string>
 </resources>

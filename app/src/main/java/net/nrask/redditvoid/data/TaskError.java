@@ -1,4 +1,4 @@
-package net.nrask.atmos.data;
+package net.nrask.redditvoid.data;
 
 /**
  * Created by Sebastian Rask on 22-04-2017.

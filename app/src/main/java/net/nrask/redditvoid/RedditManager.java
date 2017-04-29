@@ -1,9 +1,16 @@
-package net.nrask.atmos;
+package net.nrask.redditvoid;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.text.Html;
 import android.util.LruCache;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.auth.AuthenticationManager;
@@ -16,12 +23,12 @@ import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.Subreddit;
 import net.dean.jraw.paginators.SubredditPaginator;
-import net.nrask.atmos.data.AuthenticateRedditTask;
-import net.nrask.atmos.data.GetSubredditSubmissionsTask;
-import net.nrask.atmos.data.GetSubredditTask;
-import net.nrask.atmos.data.RedditAsyncTask;
-import net.nrask.srjneeds.util.SRJUtil;
+import net.nrask.redditvoid.data.AuthenticateRedditTask;
+import net.nrask.redditvoid.data.GetSubredditSubmissionsTask;
+import net.nrask.redditvoid.data.GetSubredditTask;
+import net.nrask.redditvoid.data.RedditAsyncTask;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -117,6 +124,37 @@ public class RedditManager implements GetSubredditTask.SubredditTaskCallback {
 
 	public void getFrontpage() {
 
+	}
+
+	public String getSubmissionThumbnailUrl(Submission submission, String fallback) {
+		if (submission == null || submission.getThumbnails() == null) {
+			return fallback;
+		}
+
+		String thumbnailUrl = submission.getThumbnail() != null
+				? submission.getThumbnails().getVariations()[submission.getThumbnails().getVariations().length - 1].getUrl()
+				: submission.getThumbnail();
+
+		if (thumbnailUrl != null && thumbnailUrl.length() > 0) {
+			return Html.fromHtml(thumbnailUrl).toString(); // Encode GET Parameters
+		} else {
+			return fallback;
+		}
+	}
+
+	public String serializeSubmission(Submission submission) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+
+		return mapper.writeValueAsString(submission.getDataNode());
+	}
+
+	public Submission deserializeSubmission(String jsonSubmission) throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectReader reader = mapper.reader();
+		JsonNode jsonNode = reader.readTree(jsonSubmission);
+
+
+		return new Submission(jsonNode);
 	}
 
 	public SubredditPaginator getSubredditFeed(@Nullable RedditAsyncTask.SimpleCallback<Listing<Submission>> callback, String subredditName, String... moreSubreddits) {

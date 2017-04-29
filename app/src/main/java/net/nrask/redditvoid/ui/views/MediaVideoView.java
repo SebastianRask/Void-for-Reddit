@@ -1,4 +1,4 @@
-package net.nrask.atmos.ui.views;
+package net.nrask.redditvoid.ui.views;
 
 /**
  * Created by Sebastian Rask on 22-04-2017.

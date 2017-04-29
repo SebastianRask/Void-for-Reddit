@@ -1,8 +1,8 @@
-package net.nrask.atmos.data;
+package net.nrask.redditvoid.data;
 
 import android.os.AsyncTask;
 
-import net.nrask.atmos.RedditManager;
+import net.nrask.redditvoid.RedditManager;
 
 /**
  * Created by Sebastian Rask on 21-04-2017.

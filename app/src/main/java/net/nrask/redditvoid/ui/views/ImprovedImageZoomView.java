@@ -1,4 +1,4 @@
-package net.nrask.atmos.ui.views;
+package net.nrask.redditvoid.ui.views;
 
 import android.content.Context;
 import android.util.AttributeSet;

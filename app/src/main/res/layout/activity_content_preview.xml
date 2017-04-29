@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.commit451.elasticdragdismisslayout.ElasticDragDismissFrameLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,34 +9,27 @@
     android:id="@+id/draggable_frame"
     app:dragDismissDistance="110dp"
     app:dragDismissScale="0.95"
-    tools:context="net.nrask.atmos.ui.activities.ContentPreviewActivity">
+    tools:context="net.nrask.redditvoid.ui.activities.ContentPreviewActivity">
 
     <View
-        android:transitionName="@string/transition_background_preview"
         android:id="@+id/background"
+        android:transitionName="@string/transition_background_preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.7"
-        android:background="@color/black" />
+        android:background="@color/black"
+        tools:targetApi="lollipop"/>
 
-    <net.nrask.atmos.ui.views.ImprovedImageZoomView
-        android:layout_gravity="center"
-        android:transitionName="@string/transition_image_preview"
+    <net.nrask.redditvoid.ui.views.ImprovedImageZoomView
         android:id="@+id/preview"
+        android:transitionName="@string/transition_image_preview"
+        android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        tools:targetApi="lollipop"/>
 
-    <ScrollView
-        android:layout_gravity="center"
-        android:nestedScrollingEnabled="true"
-        android:id="@+id/scrollview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-    </ScrollView>
-
-    <net.nrask.atmos.ui.views.DragLayout
+    <net.nrask.redditvoid.ui.views.DragLayout
+        android:id="@+id/drag_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -52,19 +45,27 @@
             app:cardUseCompatPadding="false"
             tools:targetApi="lollipop">
 
-            <RelativeLayout
+            <LinearLayout
+                android:id="@+id/inner_header"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <android.support.v7.widget.Toolbar
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    android:id="@+id/submission_toolbar"
+                    android:background="?attr/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_toolbar_height"/>
+                
                 <TextView
-                    style="@style/Headline"
-                    android:id="@+id/txt_title"
-                    android:text="the central point."
-                    android:padding="@dimen/default_margin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:background="@color/white"
+                    android:transitionName="@string/transition_title"
+                    style="@style/SubmissionTitle"
+                    android:id="@+id/txt_title"/>
 
-            </RelativeLayout>
+            </LinearLayout>
         </android.support.v7.widget.CardView>
 
         <TextView
@@ -77,6 +78,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FF00FF"/>
-    </net.nrask.atmos.ui.views.DragLayout>
+    </net.nrask.redditvoid.ui.views.DragLayout>
 
-</com.commit451.elasticdragdismisslayout.ElasticDragDismissFrameLayout>
+</FrameLayout>
