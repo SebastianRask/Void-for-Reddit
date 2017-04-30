@@ -20,7 +20,13 @@ public class GetSubredditTask extends RedditAsyncTask<Subreddit> {
 
 	@Override
 	protected Subreddit doInBackground(Void... voids) {
-		return redditClient.getSubreddit(subredditName);
+		try {
+			return redditClient.getSubreddit(subredditName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	@Override

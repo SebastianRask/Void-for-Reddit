@@ -127,7 +127,7 @@ public class RedditManager implements GetSubredditTask.SubredditTaskCallback {
 	}
 
 	public String getSubmissionThumbnailUrl(Submission submission, String fallback) {
-		if (submission == null || submission.getThumbnails() == null) {
+		if (submission == null || submission.getThumbnails() == null || submission.getThumbnails().getVariations().length <= 0) {
 			return fallback;
 		}
 

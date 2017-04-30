@@ -31,13 +31,16 @@
 
 
         <RelativeLayout
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin_half"
+            android:layout_marginBottom="@dimen/default_margin_half"
             android:layout_width="match_parent"
             android:layout_height="@dimen/submission_author_container_height">
 
             <FrameLayout
-                android:id="@+id/submission_header_container"
-                android:layout_marginStart="@dimen/default_margin"
                 android:layout_marginEnd="@dimen/default_margin"
+                android:id="@+id/submission_header_container"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_width="@dimen/submission_author_header_size"
@@ -63,7 +66,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </FrameLayout>
-
 
             <LinearLayout
                 android:layout_toEndOf="@+id/submission_header_container"

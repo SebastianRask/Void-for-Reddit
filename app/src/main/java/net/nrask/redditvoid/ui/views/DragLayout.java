@@ -40,10 +40,10 @@ public class DragLayout extends ViewGroup {
 	private float mCollapseOffset;
 	private boolean isLaidOut;
 
-	int dWidth, dHeight;
-	int endWidth, mEndHeight;
-	int mCollapseWidth, mCollapseHeight;
-	int originalTitleTop = -1;
+	private int dWidth, dHeight;
+	private int endWidth, mEndHeight;
+	private int mCollapseWidth, mCollapseHeight;
+	private int originalTitleTop = -1;
 
 	public DragLayout(Context context) {
 		this(context, null);
@@ -63,7 +63,7 @@ public class DragLayout extends ViewGroup {
 	protected void onFinishInflate() {
 		mHeaderView = findViewById(R.id.viewHeader);
 		mInnerHeaderView = findViewById(R.id.inner_header);
-		mDescView = findViewById(R.id.viewDesc);
+		mDescView = findViewById(R.id.comments_container);
 		mTitleView = (TextView) findViewById(R.id.txt_title);
 	}
 
@@ -131,6 +131,7 @@ public class DragLayout extends ViewGroup {
 				break;
 			}
 
+			// Make sure to fully expand or collapse when user stops dragging.
 			case MotionEvent.ACTION_UP: {
 				float dy = y - mInitialMotionY;
 				float percentageCollapsed = getPercentageCollapsed();
@@ -224,6 +225,10 @@ public class DragLayout extends ViewGroup {
 		this.mStartCollapsed = startCollapsed;
 	}
 
+	public boolean isCollapsed() {
+		return getDragOffset() != 0f;
+	}
+
 	protected int getViewWidth(View view) {
 		return view.getWidth() > 0 ? view.getWidth() : view.getMeasuredWidth();
 	}
@@ -258,24 +263,18 @@ public class DragLayout extends ViewGroup {
 			mTop = top;
 			mCollapseOffset = (float) ((dragRange - mCollapsedMargin) / (dragRange * 1.0));
 			float percentageCollapsed = getPercentageCollapsed();
-			float scale = 1;// - getPercentageCollapsed()/4f;
 
 			int rightMarginBase = SRJUtil.dpToPixels(getContext(), mCollapsedMargin/4);
 			int rightMargin = (int) (rightMarginBase * percentageCollapsed);
 
 			int left = (int) ((dWidth - rightMarginBase) * percentageCollapsed);
-			int right = (int) (endWidth  - rightMargin);
-
-			int scaleOffsetBase = 150;
-			int scaleOffset = (int) (scaleOffsetBase - scaleOffsetBase * scale);
-			left = (int) (left ) + scaleOffset;
-			right = (int) (right) + scaleOffset;
-
+			int right = endWidth  - rightMargin;
+			int bottom = (int) (mTop + mCollapseHeight + dHeight * (1 - percentageCollapsed));
 			mHeaderView.layout(
 					left,
 					mTop,
 					right,
-					(int) (mTop + mCollapseHeight + dHeight * (1 - percentageCollapsed))
+					bottom
 			);
 
 			mHeaderView.setLayoutParams(new LinearLayout.LayoutParams(
@@ -293,12 +292,6 @@ public class DragLayout extends ViewGroup {
 					mInnerHeaderView.getRight(),
 					mInnerHeaderView.getBottom()
 			);
-
-			// "Animate" views
-			float sizeScale = 1 + (1 - getDragOffset());
-
-			mHeaderView.setScaleX(scale);
-			mHeaderView.setScaleY(scale);
 
 			mDescView.setAlpha(1 - getPercentageCollapsed());
 
