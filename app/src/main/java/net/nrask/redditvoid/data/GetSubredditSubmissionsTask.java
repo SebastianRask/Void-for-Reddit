@@ -7,6 +7,8 @@ import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.paginators.SubredditPaginator;
 
+import java.net.SocketTimeoutException;
+
 /**
  * Created by Sebastian Rask on 21-04-2017.
  */
@@ -21,6 +23,17 @@ public class GetSubredditSubmissionsTask extends RedditAsyncTask<Listing<Submiss
 
 	@Override
 	protected Listing<Submission> doInBackground(Void... voids) {
-		return mPaginator.next();
+		try {
+			return mPaginator.next();
+		} catch (Exception e) {
+			//ToDo handle
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@Override
+	protected void onPostExecute(Listing<Submission> taskResult) {
+		super.onPostExecute(taskResult);
 	}
 }

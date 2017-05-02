@@ -29,7 +29,11 @@ public abstract class RedditAsyncTask<T> extends AsyncTask<Void, Void, T> {
 	protected void onPostExecute(T taskResult) {
 		super.onPostExecute(taskResult);
 		if (mSimpleTaskCallback != null) {
-			mSimpleTaskCallback.onTaskCompleted(taskResult);
+			if (taskResult != null) {
+				mSimpleTaskCallback.onTaskCompleted(taskResult);
+			} else {
+				//Todo: on error callback
+			}
 		}
 	}
 

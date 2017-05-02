@@ -1,18 +1,12 @@
 package net.nrask.redditvoid.ui.viewholders;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.os.Build;
-import android.support.v7.graphics.Palette;
-import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -21,13 +15,11 @@ import com.squareup.picasso.Picasso;
 
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.Subreddit;
-import net.nrask.redditvoid.MiscUtil;
 import net.nrask.redditvoid.R;
 import net.nrask.redditvoid.RedditManager;
 import net.nrask.redditvoid.data.GetSubredditTask;
 import net.nrask.redditvoid.ui.span.SubredditClickableSpan;
 import net.nrask.srjneeds.SRJViewHolder;
-import net.nrask.srjneeds.util.ColorUtil;
 import net.nrask.srjneeds.util.SRJSpanBuilder;
 import net.nrask.srjneeds.util.SRJUtil;
 
@@ -57,7 +49,13 @@ public class RedditSubmissionViewHolder extends SRJViewHolder<Submission> implem
 	protected TextView mAuthor;
 
 	@BindView(R.id.img_placeholder)
-	protected ImageView mPlaceholderView;
+	protected ImageView mImgPlaceholderView;
+
+	@BindView(R.id.txt_meta_data)
+	protected TextView mMetaData;
+
+	@BindView(R.id.cell_background)
+	protected View mBackground;
 
 	private Subreddit subreddit;
 	private RedditManager manager = RedditManager.getInstance();
@@ -84,7 +82,8 @@ public class RedditSubmissionViewHolder extends SRJViewHolder<Submission> implem
 		}
 
 		mTitle.setText(data.getTitle());
-		mPlaceholderView.setVisibility(View.VISIBLE);
+		mMetaData.setText(data.getScore() + "");
+		mImgPlaceholderView.setVisibility(View.VISIBLE);
 
 		mAuthor.setMovementMethod(LinkMovementMethod.getInstance());
 		mAuthor.setText(
@@ -112,13 +111,18 @@ public class RedditSubmissionViewHolder extends SRJViewHolder<Submission> implem
 		return mTitle;
 	}
 
+	public View getBackground() {
+		return mBackground;
+	}
+
 	@Override
 	public void onTaskCompleted(Subreddit subreddit) {
-		// Make sure the loaded subreddit is
-		this.subreddit = subreddit;
-		if (!subreddit.getDisplayName().equals(data.getSubredditName())) {
+		// Make sure the loaded subreddit is the same we requested
+		if (subreddit == null || !subreddit.getDisplayName().equals(data.getSubredditName())) {
 			return;
 		}
+
+		this.subreddit = subreddit;
 
 		String subredditColor = manager.getSubredditKeyColor(subreddit);
 		String subredditIconUrl = manager.getSubredditIcon(subreddit);
@@ -143,7 +147,7 @@ public class RedditSubmissionViewHolder extends SRJViewHolder<Submission> implem
 
 	@Override
 	public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-		mPlaceholderView.setVisibility(View.GONE);
+		mImgPlaceholderView.setVisibility(View.GONE);
 		return false;
 	}
 }

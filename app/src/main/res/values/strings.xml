@@ -30,5 +30,7 @@
     <!-- Intent Keys -->
     <string name="intent_reddit_submission_show_review">intent_submission_show_preview</string>
     <string name="intent_reddit_submission">intent_key_submission</string>
+    <string name="intent_reddit_submission_background">intent_key_submission_background</string>
+
     <string name="shared_image_url">shared_preview_url</string>
 </resources>

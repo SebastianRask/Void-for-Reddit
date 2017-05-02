@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements RedditAsyncTask.S
 	private void showSubmission(RedditSubmissionViewHolder viewHolder, boolean showPreview) {
 		Bundle options = showPreview ? constructSharedPreviewOptions(viewHolder) : constructSharedHeaderOptions(viewHolder);
 		try {
-			startActivityForResult(ContentPreviewActivity.createStartIntent(this, viewHolder.getData(), showPreview), -1, options);
+			startActivityForResult(SubmissionDetailsActivity.createStartIntent(this, viewHolder.getData(), showPreview), -1, options);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 			//ToDo: Notify user.

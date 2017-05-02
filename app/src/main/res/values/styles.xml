@@ -46,7 +46,9 @@
     <style name="Headline" parent="@style/Base.TextAppearance.AppCompat.Headline">
         <item name="android:fontFamily">@string/font_roboto_light</item>
     </style>
-    <style name="Subheading" parent="@style/Base.TextAppearance.AppCompat.Subhead"/>
+    <style name="Subheading" parent="@style/Base.TextAppearance.AppCompat.Subhead">
+        <item name="android:fontFamily">@string/font_roboto_medium</item>
+    </style>
     <style name="Title" parent="@style/Base.TextAppearance.AppCompat.Title"/>
     <style name="Body" parent="@style/Base.TextAppearance.AppCompat.Body1"/>
     <style name="Body.Bold" parent="@style/Base.TextAppearance.AppCompat.Body2"/>
@@ -58,9 +60,19 @@
         <item name="android:paddingStart">@dimen/default_margin</item>
         <item name="android:paddingEnd">@dimen/default_margin</item>
         <item name="android:paddingTop">@dimen/default_margin_half</item>
-        <item name="android:paddingBottom">@dimen/default_margin_half</item>
+        <item name="android:paddingBottom">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:transitionName" tools:targetApi="lollipop">@string/transition_title</item>
+    </style>
+
+    <style name="SubmissionMetaData" parent="Caption">
+        <item name="android:textSize">@dimen/submission_meta_data_size</item>
+        <item name="android:paddingStart">@dimen/default_margin</item>
+        <item name="android:paddingEnd">@dimen/default_margin</item>
+        <item name="android:paddingBottom">@dimen/default_margin_half</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
 </resources>

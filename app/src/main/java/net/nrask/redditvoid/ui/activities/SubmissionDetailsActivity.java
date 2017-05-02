@@ -1,6 +1,5 @@
 package net.nrask.redditvoid.ui.activities;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -15,7 +14,6 @@ import android.transition.TransitionSet;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,9 +24,8 @@ import com.squareup.picasso.Picasso;
 import net.dean.jraw.models.Submission;
 import net.nrask.redditvoid.R;
 import net.nrask.redditvoid.RedditManager;
+import net.nrask.redditvoid.ui.transition.PopTransition;
 import net.nrask.redditvoid.ui.views.DragLayout;
-import net.nrask.srjneeds.animation.interpolators.ReverseInterpolator;
-import net.nrask.srjneeds.util.SRJUtil;
 
 import java.io.IOException;
 
@@ -37,7 +34,7 @@ import butterknife.ButterKnife;
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 
-public class ContentPreviewActivity extends BaseActivity implements ImageViewTouch.OnImageViewTouchSingleTapListener {
+public class SubmissionDetailsActivity extends BaseActivity implements ImageViewTouch.OnImageViewTouchSingleTapListener {
 	@BindView(R.id.preview)
 	ImageViewTouch mPreview;
 
@@ -60,7 +57,7 @@ public class ContentPreviewActivity extends BaseActivity implements ImageViewTou
 	View mSubmissionHeader;
 
 	public static Intent createStartIntent(Context context, Submission submission, boolean showPreview) throws JsonProcessingException {
-		Intent startIntent = new Intent(context, ContentPreviewActivity.class);
+		Intent startIntent = new Intent(context, SubmissionDetailsActivity.class);
 		startIntent.putExtra(context.getString(R.string.intent_reddit_submission_show_review), showPreview);
 		startIntent.putExtra(context.getString(R.string.intent_reddit_submission), RedditManager.getInstance().serializeSubmission(submission));
 		return startIntent;

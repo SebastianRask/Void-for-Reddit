@@ -6,6 +6,7 @@
     <dimen name="animator_lift_of_touch_amount">5dp</dimen>
 
     <dimen name="submission_title_size">20sp</dimen>
+    <dimen name="submission_meta_data_size">15sp</dimen>
 
     <dimen name="submission_author_container_height">48dp</dimen>
     <dimen name="submission_cell_spacing">16dp</dimen>

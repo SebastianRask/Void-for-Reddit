@@ -8,7 +8,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import net.nrask.redditvoid.R;
@@ -22,7 +24,7 @@ import net.nrask.srjneeds.util.SRJUtil;
  * http://flavienlaurent.com/blog/2013/08/28/each-navigation-drawer-hides-a-viewdraghelper/
  */
 
-public class DragLayout extends ViewGroup {
+public class DragLayout extends FrameLayout {
 	private int mCollapsedMargin;
 
 	private ViewDragHelper mDragHelper;
@@ -61,6 +63,7 @@ public class DragLayout extends ViewGroup {
 
 	@Override
 	protected void onFinishInflate() {
+		super.onFinishInflate();
 		mHeaderView = findViewById(R.id.viewHeader);
 		mInnerHeaderView = findViewById(R.id.inner_header);
 		mDescView = findViewById(R.id.comments_container);
@@ -87,6 +90,7 @@ public class DragLayout extends ViewGroup {
 
 	@Override
 	public void computeScroll() {
+		super.computeScroll();
 		if (mDragHelper.continueSettling(true)) {
 			ViewCompat.postInvalidateOnAnimation(this);
 		}
@@ -277,7 +281,7 @@ public class DragLayout extends ViewGroup {
 					bottom
 			);
 
-			mHeaderView.setLayoutParams(new LinearLayout.LayoutParams(
+			mHeaderView.setLayoutParams(new FrameLayout.LayoutParams(
 					right - left, LayoutParams.WRAP_CONTENT
 			));
 

@@ -9,6 +9,7 @@
     android:stateListAnimator="@animator/animator_lift_on_touch"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
+    android:id="@+id/cell_background"
     app:cardElevation="@dimen/submission_cell_default_elevation"
     app:cardPreventCornerOverlap="false"
     app:cardUseCompatPadding="false"
@@ -22,6 +23,10 @@
         <TextView
             android:id="@+id/txt_title"
             style="@style/SubmissionTitle" />
+
+        <TextView
+            android:id="@+id/txt_meta_data"
+            style="@style/SubmissionMetaData"/>
 
         <ImageView
             android:id="@+id/img_thumbnail"
