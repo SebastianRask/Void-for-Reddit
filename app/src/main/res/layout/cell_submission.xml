@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/submission_cell_spacing"
+    android:layout_marginTop="@dimen/submission_cell_spacing"
     android:stateListAnimator="@animator/animator_lift_on_touch"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"

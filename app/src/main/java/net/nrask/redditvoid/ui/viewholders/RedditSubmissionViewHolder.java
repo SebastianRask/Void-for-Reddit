@@ -81,6 +81,7 @@ public class RedditSubmissionViewHolder extends SRJViewHolder<Submission> implem
 					.into(mThumbnail);
 		}
 
+
 		mTitle.setText(data.getTitle());
 		mMetaData.setText(data.getScore() + "");
 		mImgPlaceholderView.setVisibility(View.VISIBLE);
