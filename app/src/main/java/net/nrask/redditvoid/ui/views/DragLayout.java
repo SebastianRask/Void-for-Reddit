@@ -7,11 +7,7 @@ import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import net.nrask.redditvoid.R;
 import net.nrask.srjneeds.util.MathUtil;
@@ -33,7 +29,8 @@ public class DragLayout extends FrameLayout {
 	private View mHeaderView;
 	private View mInnerHeaderView;
 	private View mDescView;
-	private TextView mTitleView;
+	private View mTitleView;
+	private View mContentContainer;
 
 	private float mInitialMotionY;
 
@@ -64,10 +61,12 @@ public class DragLayout extends FrameLayout {
 	@Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
-		mHeaderView = findViewById(R.id.viewHeader);
+		mHeaderView = findViewById(R.id.header);
 		mInnerHeaderView = findViewById(R.id.inner_header);
 		mDescView = findViewById(R.id.comments_container);
-		mTitleView = (TextView) findViewById(R.id.txt_title);
+		mTitleView = findViewById(R.id.txt_title);
+		mContentContainer = findViewById(R.id.submission_content);
+
 	}
 
 	public void expand() {
@@ -204,7 +203,7 @@ public class DragLayout extends FrameLayout {
 			mTop = isStartingCollapsed() ? getHeight() - mCollapsedMargin - getViewHeight(mHeaderView) : 0;
 			mCallback.onViewPositionChanged(mHeaderView, 0, mTop, 0, 0);
 
-			if (getPercentageCollapsed() > 0.5f) {
+			if (isStartingCollapsed()) {
 				collapse();
 			} else {
 				expand();
@@ -286,7 +285,7 @@ public class DragLayout extends FrameLayout {
 			));
 
 			if (originalTitleTop < 0) {
-				originalTitleTop = mTitleView.getTop();
+				originalTitleTop = mContentContainer.getTop();
 			}
 
 			int innerHeaderTop = (int) (-originalTitleTop + originalTitleTop * (1 - percentageCollapsed));

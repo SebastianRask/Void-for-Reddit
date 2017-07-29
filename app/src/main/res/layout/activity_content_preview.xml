@@ -34,7 +34,7 @@
         android:layout_height="match_parent">
 
         <android.support.v7.widget.CardView
-            android:id="@+id/viewHeader"
+            android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:stateListAnimator="@animator/animator_lift_on_touch"
@@ -58,12 +58,9 @@
                     android:background="?attr/colorPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/default_toolbar_height"/>
-                
-                <TextView
-                    style="@style/SubmissionTitle"
-                    android:id="@+id/txt_title"
-                    android:background="@color/white"
-                    android:transitionName="@string/transition_title"/>
+
+                <include
+                    layout="@layout/cell_submission" />
 
             </LinearLayout>
         </android.support.v7.widget.CardView>

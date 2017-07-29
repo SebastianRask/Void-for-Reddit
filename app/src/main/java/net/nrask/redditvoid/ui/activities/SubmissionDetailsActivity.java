@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Fade;
 import android.transition.Slide;
@@ -24,7 +27,7 @@ import com.squareup.picasso.Picasso;
 import net.dean.jraw.models.Submission;
 import net.nrask.redditvoid.R;
 import net.nrask.redditvoid.RedditManager;
-import net.nrask.redditvoid.ui.transition.PopTransition;
+import net.nrask.redditvoid.ui.viewholders.RedditSubmissionViewHolder;
 import net.nrask.redditvoid.ui.views.DragLayout;
 
 import java.io.IOException;
@@ -35,6 +38,14 @@ import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 
 public class SubmissionDetailsActivity extends BaseActivity implements ImageViewTouch.OnImageViewTouchSingleTapListener {
+
+	public static Intent createStartIntent(Context context, Submission submission, boolean showPreview) throws JsonProcessingException {
+		Intent startIntent = new Intent(context, SubmissionDetailsActivity.class);
+		startIntent.putExtra(context.getString(R.string.intent_reddit_submission_show_review), showPreview);
+		startIntent.putExtra(context.getString(R.string.intent_reddit_submission), RedditManager.getInstance().serializeSubmission(submission));
+		return startIntent;
+	}
+
 	@BindView(R.id.preview)
 	ImageViewTouch mPreview;
 
@@ -53,15 +64,13 @@ public class SubmissionDetailsActivity extends BaseActivity implements ImageView
 	@BindView(R.id.comments_container)
 	View mCommentsContainer;
 
-	@BindView(R.id.viewHeader)
+	@BindView(R.id.header)
 	View mSubmissionHeader;
 
-	public static Intent createStartIntent(Context context, Submission submission, boolean showPreview) throws JsonProcessingException {
-		Intent startIntent = new Intent(context, SubmissionDetailsActivity.class);
-		startIntent.putExtra(context.getString(R.string.intent_reddit_submission_show_review), showPreview);
-		startIntent.putExtra(context.getString(R.string.intent_reddit_submission), RedditManager.getInstance().serializeSubmission(submission));
-		return startIntent;
-	}
+	@BindView(R.id.submission_content)
+	CardView mSubmissionContent;
+
+	private RedditSubmissionViewHolder mSubmissionVH;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +101,9 @@ public class SubmissionDetailsActivity extends BaseActivity implements ImageView
 
 		tryShowImageUrl(mPreview, manager.getSubmissionThumbnailUrl(redditSubmission, null));
 
-		mTitle.setText(redditSubmission.getTitle());
+		ViewCompat.setElevation(mSubmissionContent, 0);
+		mSubmissionVH = new RedditSubmissionViewHolder(mSubmissionContent);
+		mSubmissionVH.bindObject(redditSubmission);
 	}
 
 	@Override
@@ -104,6 +115,8 @@ public class SubmissionDetailsActivity extends BaseActivity implements ImageView
 		if (!mDragLayout.isCollapsed()) {
 			mPreview.setVisibility(View.GONE);
 			mTranslucentBackground.setVisibility(View.GONE);
+		} else {
+			mDragLayout.setVisibility(View.GONE);
 		}
 
 		super.onBackPressed();
@@ -146,7 +159,7 @@ public class SubmissionDetailsActivity extends BaseActivity implements ImageView
 
 		getWindow().setReturnTransition(constructEnterTransition());
 		getWindow().setEnterTransition(constructEnterTransition());
-		getWindow().setSharedElementEnterTransition(constructSharedEnterTransition(sharedPreview));
+		//getWindow().setSharedElementEnterTransition(constructSharedEnterTransition(sharedPreview));
 
 		if (!sharedPreview) {
 			// Hide these views while the shared enter transition is in progress.
@@ -184,6 +197,7 @@ public class SubmissionDetailsActivity extends BaseActivity implements ImageView
 		return false;
 	}
 
+	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	private Transition constructEnterTransition() {
 		int slideEnterTransDuration = 340;
 		Transition commentsTrans = new Slide(Gravity.BOTTOM);
@@ -209,11 +223,12 @@ public class SubmissionDetailsActivity extends BaseActivity implements ImageView
 		enterTrans.addTransition(fadeEnterTrans);
 		enterTrans.addTransition(commentsTrans);
 		enterTrans.addTransition(allViewsTrans);
-		enterTrans.addTransition(toolbarTrans);
+		//enterTrans.addTransition(toolbarTrans);
 
 		return enterTrans;
 	}
 
+	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	private Transition constructSharedEnterTransition(boolean isCollapsed) {
 		TransitionSet result = new TransitionSet();
 		Transition moveTrans = TransitionInflater.from(this).inflateTransition(android.R.transition.move);
@@ -229,14 +244,21 @@ public class SubmissionDetailsActivity extends BaseActivity implements ImageView
 		return result;
 	}
 
+	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 	private Transition constructSharedReturnTransition(boolean isCollapsed) {
 		Transition trans = TransitionInflater.from(this).inflateTransition(android.R.transition.move);
-		trans.addTarget(mTitle);
-		if (isCollapsed) {
-			trans.addTarget(mPreview);
-			trans.addTarget(mTranslucentBackground);
-		}
 
-		return trans;
+		trans.excludeTarget(mSubmissionVH.getBackground(), isCollapsed);
+		trans.excludeTarget(mPreview, false);
+
+		Transition instantTranst = TransitionInflater.from(this).inflateTransition(android.R.transition.move);
+		instantTranst.setDuration(1);
+		instantTranst.addTarget(mSubmissionVH.getBackground());
+
+		TransitionSet set = new TransitionSet();
+		set.addTransition(trans);
+		set.addTransition(instantTranst);
+
+		return set;
 	}
 }

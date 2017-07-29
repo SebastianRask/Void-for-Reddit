@@ -1,3 +1,1 @@
 include ':app'
-include ':srjneeds'
-project(':srjneeds').projectDir = new File(settingsDir, '../SRJNeeds/srjneeds')

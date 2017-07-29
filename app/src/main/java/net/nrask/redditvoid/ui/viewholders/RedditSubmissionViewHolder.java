@@ -54,8 +54,8 @@ public class RedditSubmissionViewHolder extends SRJViewHolder<Submission> implem
 	@BindView(R.id.txt_meta_data)
 	protected TextView mMetaData;
 
-	@BindView(R.id.cell_background)
-	protected View mBackground;
+	@BindView(R.id.submission_content)
+	protected View mContent;
 
 	private Subreddit subreddit;
 	private RedditManager manager = RedditManager.getInstance();
@@ -113,7 +113,7 @@ public class RedditSubmissionViewHolder extends SRJViewHolder<Submission> implem
 	}
 
 	public View getBackground() {
-		return mBackground;
+		return mContent;
 	}
 
 	@Override

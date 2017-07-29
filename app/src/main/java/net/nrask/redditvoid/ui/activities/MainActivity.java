@@ -85,18 +85,17 @@ public class MainActivity extends AppCompatActivity implements RedditAsyncTask.S
 
 	@SuppressWarnings("unchecked")
 	private Bundle constructSharedHeaderOptions(RedditSubmissionViewHolder viewHolder) {
-		View sharedTitleView = viewHolder.getTitleView();
 		View sharedPreviewView = viewHolder.getThumbnailView();
 
 		Pair<View, String> backgroundPreview = new Pair<>(sharedPreviewView, getString(R.string.transition_background_preview));
 		Pair<View, String> imagePreview = new Pair<>(sharedPreviewView, getString(R.string.transition_image_preview));
-		Pair<View, String> title = new Pair<>(sharedTitleView, getString(R.string.transition_title));
+		Pair<View, String> submissionContent = new Pair<>(viewHolder.getBackground(), getString(R.string.transition_subreddit_icon));
 
 		ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
 				this,
 				imagePreview,
 				backgroundPreview,
-				title
+				submissionContent
 		);
 
 		return options.toBundle();
